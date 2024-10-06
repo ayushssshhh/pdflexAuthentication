@@ -42,7 +42,7 @@ app.post('/users', async (req, res) => {
 // Define a route to retrieve userId by username and password
 app.post('/users/login', async (req, res) => {
     try {
-        const { username,' password } = req.body;
+        const { username, password } = req.body;
         const user = await User.findOne({ username, password });
         if (user) {
             res.status(200).send({ msg: 'pass', _id: user._id.toString() , username: username });
