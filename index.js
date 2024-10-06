@@ -23,6 +23,10 @@ const credSchema = new mongoose.Schema({
 // Create User model
 const User = mongoose.model('Cred', credSchema);
 
+app.get("/" , async (req, res) => {
+    res.send("access denied")
+})
+
 // Define a route to create a new user
 app.post('/users', async (req, res) => {
     try {
