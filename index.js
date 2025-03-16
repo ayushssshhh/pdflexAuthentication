@@ -58,6 +58,43 @@ app.post('/users/login', async (req, res) => {
     }
 });
 
+app.post("/summarize", async (req, res) => {
+    try {
+      const { content } = req.body;
+      if (!content) {
+        return res.status(400).json({ error: "Content is required" });
+      }
+  
+      const response = await axios.post(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          model: "gpt-3.5-turbo",
+          messages: [
+            {
+              role: "user",
+              content: `Create a detailed bullet points summary for the mentioned content. 
+              - Each bullet point should start with a hyphen and end with a full stop.
+              - No nested bullet points.
+              
+              Content: ${content}`,
+            },
+          ],
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          },
+        }
+      );
+  
+      res.json(response.data);
+    } catch (error) {
+      console.error("Error fetching data from OpenAI:", error);
+      res.status(500).json({ error: "Failed to fetch summary" });
+    }
+  });
+
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
